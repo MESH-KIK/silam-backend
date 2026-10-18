@@ -56,3 +56,342 @@ body {
 .footer-navy {
     color: var(--silam-navy-dark);
 }
+
+/* Container nav agar posisi relative */
+.navbar-nav {
+    position: relative;
+    gap: 0.5rem;
+}
+
+/* Container nav agar posisi relative */
+.navbar-nav {
+    position: relative;
+    gap: 0.5rem;
+}
+
+/* Style dasar tautan */
+.navbar-nav .nav-link {
+    position: relative;
+    padding-bottom: 8px !important;
+    color: #64748b;
+    transition: color 0.3s ease;
+}
+
+/* Garis bawah menggunakan pseudo-element ::after */
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background-color: #1e3a8a; /* Warna biru SILAM */
+    border-radius: 2px;
+    transition: width 0.3s ease, transform 0.3s ease;
+    transform: translateX(-50%);
+}
+
+/* 1. Efek saat menu HOVER (hanya berlaku pada menu yang TIDAK aktif) */
+.navbar-nav .nav-link:not(.active):hover::after {
+    width: 60%;
+}
+
+/* 2. Efek saat menu AKTIF */
+.navbar-nav .nav-link.active {
+    color: #1e3a8a !important;
+    font-weight: 600;
+}
+
+.navbar-nav .nav-link.active::after {
+    width: 100% !important; /* Kunci lebar garis tetap 100% */
+}
+
+/* ========================================================
+   STATUS CUCIAN & TRACKING SILAM STYLESHEET
+   File: public/css/status-cucian.css
+   ======================================================== */
+
+:root {
+  --navy-main: #1E2E4A;
+  --navy-dark: #152238;
+  --navy-btn: #24385B;
+  --accent-blue: #3B82F6;
+  --card-gradient-top: #9BB8EA;
+  --card-gradient-bottom: #8CAEE2;
+  --bubble-color: rgba(255, 255, 255, 0.45);
+}
+
+/* 1. Hero Card Pelacakan */
+.tracking-hero-card {
+  background: linear-gradient(180deg, var(--card-gradient-top) 0%, var(--card-gradient-bottom) 100%);
+  border-radius: 28px;
+  padding: 60px 24px 70px 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(140, 174, 226, 0.25);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Dekorasi Gelembung Sabun (Soap Bubbles) */
+.tracking-hero-card .bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--bubble-color);
+  pointer-events: none;
+}
+
+.bubble-1 { width: 50px; height: 50px; left: 10%; top: 40%; }
+.bubble-2 { width: 90px; height: 90px; left: 0%; bottom: -15px; }
+.bubble-3 { width: 30px; height: 30px; left: 15.5%; bottom: 15%; }
+.bubble-4 { width: 70px; height: 70px; left: 25%; bottom: -20px; }
+.bubble-5 { width: 24px; height: 24px; left: 38%; bottom: 25%; }
+.bubble-6 { width: 110px; height: 110px; right: 15%; bottom: -30px; }
+.bubble-7 { width: 55px; height: 55px; right: 9%; top: 48%; }
+.bubble-8 { width: 25px; height: 25px; right: 17%; bottom: 18%; }
+
+.tracking-hero-title {
+  color: var(--navy-dark);
+  font-size: clamp(1.4rem, 2.8vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+/* 2. Input Pencarian Pill */
+.tracking-search-box-wrap {
+  max-width: 580px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
+}
+
+.tracking-input-pill {
+  background: #FFFFFF;
+  border-radius: 50rem;
+  padding: 6px 8px 6px 26px;
+  box-shadow: 0 6px 25px rgba(21, 34, 56, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  transition: box-shadow 0.25s ease;
+}
+
+.tracking-input-pill:focus-within {
+  box-shadow: 0 8px 30px rgba(30, 46, 74, 0.18);
+}
+
+.tracking-input-pill input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.96rem;
+  color: var(--navy-dark);
+  font-weight: 500;
+  background: transparent;
+}
+
+.tracking-input-pill input::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.btn-search-bubble {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--navy-btn);
+  color: #FFFFFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-search-bubble:hover {
+  background-color: var(--navy-dark);
+  transform: scale(1.05);
+}
+
+/* Demo Badges */
+.demo-resi-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  position: relative;
+  z-index: 3;
+  flex-wrap: wrap;
+}
+
+.demo-badge-link {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: var(--navy-dark);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 50rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.demo-badge-link:hover {
+  background: #FFFFFF;
+  color: var(--accent-blue);
+}
+
+/* 3. Card Hasil Status Cucian */
+.status-result-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(30, 46, 74, 0.06);
+  border: 1px solid #E2E8F0;
+  animation: fadeInSlideUp 0.4s ease forwards;
+}
+
+.status-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 50rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge-progress-blue {
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #BFDBFE;
+}
+
+.badge-ready-green {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+
+.order-info-box {
+  background: #F8FAFC;
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin: 20px 0;
+  border: 1px solid #EDF2F7;
+}
+
+.order-info-label {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin-bottom: 2px;
+}
+
+.order-info-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--navy-main);
+}
+
+/* 4. Timeline Progres Cucian */
+.laundry-timeline {
+  position: relative;
+  padding-left: 36px;
+  margin-top: 24px;
+}
+
+.laundry-timeline::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: #E2E8F0;
+}
+
+.timeline-step-item {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.timeline-step-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-circle {
+  position: absolute;
+  left: -36px;
+  top: 2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: #94A3B8;
+  z-index: 2;
+}
+
+.timeline-step-item.is-done .timeline-circle {
+  background: #10B981;
+  border-color: #10B981;
+  color: #FFFFFF;
+}
+
+.timeline-step-item.is-active .timeline-circle {
+  background: #2563EB;
+  border-color: #93C5FD;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  color: #FFFFFF;
+}
+
+.timeline-heading {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--navy-main);
+  margin-bottom: 2px;
+}
+
+.timeline-step-item.is-active .timeline-heading {
+  color: #1D4ED8;
+}
+
+.timeline-subtext {
+  font-size: 0.82rem;
+  color: #64748B;
+}
+
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsif Mobile */
+@media (max-width: 767.98px) {
+  .tracking-hero-card {
+    padding: 40px 18px 50px 18px;
+    border-radius: 22px;
+  }
+  .status-result-card {
+    padding: 24px 18px;
+  }
+}
