@@ -1,188 +1,194 @@
 @extends('landing')
 
-@section('title_menu', 'Outlet')
+@section('title_menu', 'Cek Status')
 
 @section('isikonten')
 
-@push('styles')
-  {{-- Memanggil file CSS terpisah --}}
-  <link rel="stylesheet" href="{{ asset('bs/css/silam-layout.css') }}">
-@endpush
+@php
+    $waCs = '6282119793595'; // nomor WhatsApp CS (format tanpa + dan tanpa 0 di depan)
+@endphp
 
 <div class="container my-4">
+
+    <!-- ===== HERO + KOLOM PENCARIAN ===== -->
     <div class="tracking-hero-card">
-    <!-- Gelembung Dekorasi Latar Belakang -->
-    <div class="bubble bubble-1"></div>
-    <div class="bubble bubble-2"></div>
-    <div class="bubble bubble-3"></div>
-    <div class="bubble bubble-4"></div>
-    <div class="bubble bubble-5"></div>
-    <div class="bubble bubble-6"></div>
-    <div class="bubble bubble-7"></div>
-    <div class="bubble bubble-8"></div>
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="bubble bubble-3"></div>
+        <div class="bubble bubble-4"></div>
+        <div class="bubble bubble-5"></div>
+        <div class="bubble bubble-6"></div>
+        <div class="bubble bubble-7"></div>
+        <div class="bubble bubble-8"></div>
 
-    <!-- Judul Sesuai Desain Mockup -->
-    <h1 class="tracking-hero-title">
-      Lacak Pesananmu secara real-time!<br>
-      Dengan memasukan nomor resi atau nomor HP.
-    </h1>
+        <h1 class="tracking-hero-title">
+            Lacak Pesananmu secara real-time!<br>
+            Dengan memasukkan nomor pesanan atau nomor HP.
+        </h1>
 
-        <div class="tracking-search-box-wrap"><form action="{{ url()->current() }}" method="GET">
-            <div class="tracking-input-pill">
-                <input type="text" name="order_number" placeholder="Masukan Nomor Pesanan"
-                    value="{{ request('order_number') }}" autocomplete="off" required>
-                <button type="submit" class="btn-search-bubble" aria-label="Cari Resi">
-                    <i class="bi bi-search"></i>
-                </button>
+        <div class="tracking-search-box-wrap">
+            <form action="{{ route('tracking') }}" method="GET">
+                <div class="tracking-input-pill">
+                    <input type="text" name="q" placeholder="Nomor pesanan / nomor HP"
+                           value="{{ request('q') }}" autocomplete="off" required>
+                    <button type="submit" class="btn-search-bubble" aria-label="Cari pesanan">
+                        <i class="bi bi-search"></i>
+                    </button>
                 </div>
             </form>
         </div>
-  </div>
-
-  <!-- ========================================================
-       2. HASIL STATUS CUCIAN & TIMELINE REAL-TIME
-       ======================================================== -->
-  @php
-    $searchKey = request('order_number', 'SLM-2026-9021');
-    $currentStep = ($searchKey === 'SLM-2026-8804') ? 5 : 4;
-
-    // Memakai objek $order dari Controller jika ada, atau fallback data simulasi
-    $orderData = $order ?? (object)[
-      'order_number'    => strtoupper($searchKey),
-      'created_at_text' => 'Hari Ini, 09:15 WIB',
-      'customer_name'   => 'Ahmad Syahrul',
-      'service_name'    => 'Cuci Kering Setrika',
-      'weight'          => '4.2 Kg',
-      'total_price'     => 'Rp 29.400',
-      'estimate'        => 'Hari Ini, 16:30 WIB',
-      'status'          => ($currentStep === 5) ? 'Siap Diambil' : 'Sedang Diproses',
-      'current_step'    => $currentStep, // 1 s.d 5
-    ];
-  @endphp
-
-  @if(request()->has('order_number') || isset($order))
-    <div class="row justify-content-center">
-      <div class="col-lg-12">
-        <div class="status-result-card">
-
-          <!-- Header Hasil Resi -->
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 border-bottom">
-            <div>
-              <h4 class="fw-bold mb-1" style="color: var(--navy-main);">Resi: {{ $orderData->order_number }}</h4>
-              <div class="text-muted small">Waktu Penerimaan: <span>{{ $orderData->created_at_text }}</span></div>
-            </div>
-            <div>
-              @if($orderData->current_step >= 5)
-                <span class="status-badge-pill badge-ready-green">
-                  <i class="bi bi-check-circle-fill"></i> Siap Diambil
-                </span>
-              @else
-                <span class="status-badge-pill badge-progress-blue">
-                  <i class="bi bi-arrow-repeat"></i> Sedang Diproses (In Progress)
-                </span>
-              @endif
-            </div>
-          </div>
-
-          <!-- Rincian Pesanan (Grid Informasi) -->
-          <div class="order-info-box">
-            <div class="row g-3">
-              <div class="col-6 col-md-3">
-                <div class="order-info-label">Nama Pelanggan</div>
-                <div class="order-info-value">{{ $orderData->customer_name }}</div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="order-info-label">Paket Layanan</div>
-                <div class="order-info-value">{{ $orderData->service_name }}</div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="order-info-label">Berat & Biaya</div>
-                <div class="order-info-value">{{ $orderData->weight }} ({{ $orderData->total_price }})</div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="order-info-label">Estimasi Selesai</div>
-                <div class="order-info-value text-primary">{{ $orderData->estimate }}</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 5 Tahapan Progres Cucian (SOP SILAM) -->
-          <h6 class="fw-bold mt-4 mb-3" style="color: var(--navy-main);">
-            <i class="bi bi-clock-history me-1 text-primary"></i> Progres Tahapan Cucian Real-Time
-          </h6>
-
-          <div class="laundry-timeline">
-            <!-- Tahap 1 -->
-            <div class="timeline-step-item {{ $orderData->current_step > 1 ? 'is-done' : ($orderData->current_step == 1 ? 'is-active' : '') }}">
-              <div class="timeline-circle">
-                @if($orderData->current_step > 1) <i class="bi bi-check-lg"></i> @else 1 @endif
-              </div>
-              <div class="timeline-heading">1. Penimbangan & Terbit Nota Digital</div>
-              <div class="timeline-subtext">Pakaian ditimbang transparan di kasir Ath_hura dan nota otomatis dikirim via WhatsApp. (09:18 WIB)</div>
-            </div>
-
-            <!-- Tahap 2 -->
-            <div class="timeline-step-item {{ $orderData->current_step > 2 ? 'is-done' : ($orderData->current_step == 2 ? 'is-active' : '') }}">
-              <div class="timeline-circle">
-                @if($orderData->current_step > 2) <i class="bi bi-check-lg"></i> @else 2 @endif
-              </div>
-              <div class="timeline-heading">2. Proses Pencucian Higienis</div>
-              <div class="timeline-subtext">Dicuci bersih dengan takaran deterjen khusus kain dan pewangi tahan lama. (10:05 WIB)</div>
-            </div>
-
-            <!-- Tahap 3 -->
-            <div class="timeline-step-item {{ $orderData->current_step > 3 ? 'is-done' : ($orderData->current_step == 3 ? 'is-active' : '') }}">
-              <div class="timeline-circle">
-                @if($orderData->current_step > 3) <i class="bi bi-check-lg"></i> @else 3 @endif
-              </div>
-              <div class="timeline-heading">3. Pengeringan Mesin Suhu Terkontrol</div>
-              <div class="timeline-subtext">Pakaian dikeringkan tuntas dengan mesin komersial, bebas debu & higienis. (11:20 WIB)</div>
-            </div>
-
-            <!-- Tahap 4 -->
-            <div class="timeline-step-item {{ $orderData->current_step > 4 ? 'is-done' : ($orderData->current_step == 4 ? 'is-active' : '') }}">
-              <div class="timeline-circle">
-                @if($orderData->current_step > 4)
-                  <i class="bi bi-check-lg"></i>
-                @elseif($orderData->current_step == 4)
-                  <i class="bi bi-fire"></i>
-                @else
-                  4
-                @endif
-              </div>
-              <div class="timeline-heading">
-                4. Penyetrikaan Uap & Pelipatan Rapi
-                @if($orderData->current_step == 4) <span class="badge bg-primary-subtle text-primary ms-1">Sedang Berjalan</span> @endif
-              </div>
-              <div class="timeline-subtext">Pakaian disetrika uap profesional agar halus licin tanpa merusak serat kain.</div>
-            </div>
-
-            <!-- Tahap 5 -->
-            <div class="timeline-step-item {{ $orderData->current_step >= 5 ? 'is-done is-active' : '' }}">
-              <div class="timeline-circle">
-                @if($orderData->current_step >= 5) <i class="bi bi-box-seam"></i> @else 5 @endif
-              </div>
-              <div class="timeline-heading">5. Siap Diambil / Diantar</div>
-              <div class="timeline-subtext">Pakaian dipacking rapi dan notifikasi WhatsApp siap ambil terkirim otomatis ke HP Anda.</div>
-            </div>
-          </div>
-
-          <!-- Tombol Aksi Cetak & WhatsApp -->
-          <div class="d-flex flex-wrap gap-2 justify-content-end mt-4 pt-3 border-top">
-            <button class="btn btn-outline-secondary rounded-pill btn-sm px-3" onclick="window.print()">
-              <i class="bi bi-printer me-1"></i> Cetak Bukti Status
-            </button>
-            <a href="https://wa.me/6282119793595?text=Halo%20SILAM,%20saya%20ingin%20konfirmasi%20resi%20{{ $orderData->order_number }}" target="_blank" class="btn btn-success rounded-pill btn-sm px-4">
-              <i class="bi bi-whatsapp me-1"></i> Hubungi CS Outlet
-            </a>
-          </div>
-
-        </div>
-      </div>
     </div>
-  @endif
+
+    <!-- ===== TIDAK DITEMUKAN ===== -->
+    @if($dicari && ! $order)
+        <div class="alert alert-warning rounded-4 mt-4">
+            Pesanan tidak ditemukan. Periksa kembali nomor pesanan atau nomor HP yang Anda masukkan.
+        </div>
+    @endif
+
+    <!-- ===== HASIL ===== -->
+    @if($order)
+        @php
+            $tahap = $info['tahap'];
+            $siap  = $tahap >= 3; // siap_ambil atau selesai
+            $tahapList = [
+                1 => ['Pesanan Diterima (Antrian)', 'Pakaian sudah ditimbang dan nota tercatat di kasir. Menunggu giliran dikerjakan.'],
+                2 => ['Sedang Diproses',            'Pakaian sedang dicuci, dikeringkan, dan disetrika sesuai layanan yang dipilih.'],
+                3 => ['Siap Diambil',               'Pakaian sudah dikemas rapi dan siap diambil di outlet.'],
+                4 => ['Selesai',                    'Pesanan sudah diambil. Terima kasih telah mempercayakan cucian Anda kepada SILAM.'],
+            ];
+        @endphp
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-12">
+
+                {{-- Pilihan pesanan lain (muncul jika dicari lewat nomor HP dan punya beberapa pesanan) --}}
+                @if($daftar->count() > 1)
+                    <div class="mb-3 small">
+                        <span class="text-muted">Pesanan atas nomor ini:</span>
+                        @foreach($daftar as $d)
+                            <a href="{{ route('tracking', ['q' => $d->nomor_pesanan]) }}"
+                               class="badge rounded-pill text-bg-light border text-decoration-none ms-1
+                                      {{ $d->id_pesanan === $order->id_pesanan ? 'fw-bold' : '' }}">
+                                {{ $d->nomor_pesanan }} &middot; {{ $d->label_kerja }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+
+                <div class="status-result-card">
+
+                    <!-- Header -->
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 border-bottom">
+                        <div>
+                            <h4 class="fw-bold mb-1" style="color: var(--navy-main);">No. Pesanan: {{ $order->nomor_pesanan }}</h4>
+                            <div class="text-muted small">
+                                Waktu Penerimaan: <span>{{ $order->tanggal_pesanan_dibuat->format('d/m/Y, H:i') }} WIB</span>
+                            </div>
+                        </div>
+                        <div>
+                            @if($siap)
+                                <span class="status-badge-pill badge-ready-green">
+                                    <i class="bi bi-check-circle-fill"></i> {{ $order->label_kerja }}
+                                </span>
+                            @else
+                                <span class="status-badge-pill badge-progress-blue">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                    {{ $order->status_kerja === 'antrian' ? 'Dalam Antrian' : 'Sedang Diproses' }}
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Rincian pesanan -->
+                    <div class="order-info-box">
+                        <div class="row g-3">
+                            <div class="col-6 col-md-3">
+                                <div class="order-info-label">Nama Pelanggan</div>
+                                <div class="order-info-value">{{ $info['nama'] }}</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="order-info-label">Paket Layanan</div>
+                                <div class="order-info-value">{{ $info['paket'] }}</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="order-info-label">Jumlah &amp; Biaya</div>
+                                <div class="order-info-value">
+                                    {{ $info['berat'] }} (Rp {{ number_format($order->total_tagihan, 0, ',', '.') }})
+                                    <span class="badge {{ $order->status_pembayaran === 'lunas' ? 'text-bg-success' : 'text-bg-danger' }} ms-1">
+                                        {{ $order->status_pembayaran === 'lunas' ? 'Lunas' : 'Belum lunas' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="order-info-label">Estimasi Selesai</div>
+                                <div class="order-info-value text-primary">{{ $order->tanggal_estimasi_selesai->format('d/m/Y, H:i') }} WIB</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tahapan progres (dari status_kerja) -->
+                    <h6 class="fw-bold mt-4 mb-3" style="color: var(--navy-main);">
+                        <i class="bi bi-clock-history me-1 text-primary"></i> Progres Pesanan
+                    </h6>
+
+                    <div class="laundry-timeline">
+                        @foreach($tahapList as $no => [$judul, $ket])
+                            @php
+                                $kelas = $tahap > $no ? 'is-done' : ($tahap == $no ? 'is-active' : '');
+                                if ($no == 4 && $tahap == 4) $kelas = 'is-done is-active';
+                            @endphp
+                            <div class="timeline-step-item {{ $kelas }}">
+                                <div class="timeline-circle">
+                                    @if($tahap > $no || ($no == 4 && $tahap == 4)) <i class="bi bi-check-lg"></i> @else {{ $no }} @endif
+                                </div>
+                                <div class="timeline-heading">
+                                    {{ $no }}. {{ $judul }}
+                                    @if($tahap == $no && $no < 4)
+                                        <span class="badge bg-primary-subtle text-primary ms-1">Saat ini</span>
+                                    @endif
+                                </div>
+                                <div class="timeline-subtext">{{ $ket }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Riwayat pengerjaan (dari tabel riwayat status) -->
+                    <h6 class="fw-bold mt-4 mb-3" style="color: var(--navy-main);">
+                        <i class="bi bi-list-check me-1 text-primary"></i> Riwayat Pengerjaan
+                    </h6>
+
+                    <div class="laundry-timeline">
+                        @foreach($order->riwayat as $r)
+                            <div class="timeline-step-item {{ $loop->first ? 'is-active' : 'is-done' }}">
+                                <div class="timeline-circle">
+                                    @if($loop->first) <i class="bi bi-record-circle"></i> @else <i class="bi bi-check-lg"></i> @endif
+                                </div>
+                                <div class="timeline-heading">{{ $r->status_detail }}</div>
+                                <div class="timeline-subtext">
+                                    {{ $r->waktu_update->format('d/m/Y, H:i') }} WIB
+                                    @if($r->keterangan) &middot; {{ $r->keterangan }} @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Tombol aksi -->
+                    <div class="d-flex flex-wrap gap-2 justify-content-end mt-4 pt-3 border-top">
+                        <button class="btn btn-outline-secondary rounded-pill btn-sm px-3" onclick="window.print()">
+                            <i class="bi bi-printer me-1"></i> Cetak Bukti Status
+                        </button>
+                        <a href="https://wa.me/{{ $waCs }}?text={{ rawurlencode('Halo SILAM, saya ingin konfirmasi pesanan ' . $order->nomor_pesanan) }}"
+                           target="_blank" rel="noopener" class="btn btn-success rounded-pill btn-sm px-4">
+                            <i class="bi bi-whatsapp me-1"></i> Hubungi CS Outlet
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @endif
 
 </div>
 
 @endsection
-
